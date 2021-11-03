@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">NewApp</string>
+    <string name="first_counter">First Counter</string>
+    <string name="zero">0</string>
+    <string name="second_counter">Second Counter</string>
+    <string name="third_counter">Third Counter</string>
+</resources>
