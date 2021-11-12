@@ -4,4 +4,5 @@
     <string name="zero">0</string>
     <string name="second_counter">Second Counter</string>
     <string name="third_counter">Third Counter</string>
+    <string name="username">Username</string>
 </resources>

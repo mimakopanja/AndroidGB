@@ -1,21 +1,19 @@
 package com.example.newapp
 
-class MainPresenter(private val view: MainView) {
+import com.example.newapp.screen.IScreens
+import com.github.terrakok.cicerone.Router
+import moxy.MvpPresenter
 
-    private val model = CountersModel()
+class MainPresenter(
+    private val router: Router, private val screens: IScreens
+    ) : MvpPresenter<MainView>() {
 
-    fun firstCounterOnClick() {
-        val nextValue = model.next(0)
-        view.setButtonFirstText(nextValue.toString())
+    override fun onFirstViewAttach() {
+        super.onFirstViewAttach()
+        router.replaceScreen(screens.users())
     }
 
-    fun secondCounterOnClick() {
-        val nextValue = model.next(1)
-        view.setButtonSecondText(nextValue.toString())
-    }
-
-    fun thirdCounterOnClick() {
-        val nextValue = model.next(2)
-        view.setButtonThirdText(nextValue.toString())
+    fun backClicked() {
+        router.exit()
     }
 }

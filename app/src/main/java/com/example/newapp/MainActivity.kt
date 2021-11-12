@@ -1,36 +1,45 @@
 package com.example.newapp
 
-import androidx.appcompat.app.AppCompatActivity
+
 import android.os.Bundle
-import android.view.View
-import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.newapp.databinding.ActivityMainBinding
+import com.example.newapp.screen.AndroidScreens
+import com.github.terrakok.cicerone.androidx.AppNavigator
+import moxy.MvpAppCompatActivity
+import moxy.ktx.moxyPresenter
 
-class MainActivity : AppCompatActivity(R.layout.activity_main), MainView {
+class MainActivity : MvpAppCompatActivity(), MainView {
+    private val navigator = AppNavigator(this, R.id.container)
 
-    private val binding: ActivityMainBinding by viewBinding()
-    private val presenter = MainPresenter(this)
+    private val presenter by moxyPresenter {
+        MainPresenter(App.instance.router, AndroidScreens())
+    }
+
+    private var vb: ActivityMainBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
+        vb = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(vb?.root)
+    }
 
-        with(binding){
-            btnCounter1.setOnClickListener { presenter.firstCounterOnClick()}
-            btnCounter2.setOnClickListener { presenter.secondCounterOnClick() }
-            btnCounter3.setOnClickListener { presenter.thirdCounterOnClick() }
+    override fun onResumeFragments() {
+        super.onResumeFragments()
+        App.instance.navigatorHolder.setNavigator(navigator)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        App.instance.navigatorHolder.removeNavigator()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        supportFragmentManager.fragments.forEach {
+            if (it is BackButtonListener && it.backPressed()) {
+                return
+            }
         }
-    }
-
-    override fun setButtonFirstText(text: String) {
-        binding.btnCounter1.text = text
-    }
-
-    override fun setButtonSecondText(text: String) {
-        binding.btnCounter2.text = text
-    }
-
-    override fun setButtonThirdText(text: String) {
-        binding.btnCounter3.text = text
+        presenter.backClicked()
     }
 }
