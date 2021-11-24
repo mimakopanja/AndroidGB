@@ -1,10 +1,11 @@
-package com.example.newapp.user
+package com.example.newapp.mvp.view
 
+import com.example.newapp.mvp.model.entity.GithubRepository
 import moxy.MvpView
 import moxy.viewstate.strategy.AddToEndSingleStrategy
 import moxy.viewstate.strategy.StateStrategyType
 
 @StateStrategyType(AddToEndSingleStrategy::class)
-interface UserView: MvpView {
-    fun showLogin(text: String)
+interface RepositoryView: MvpView {
+    fun fillData(data: GithubRepository)
 }

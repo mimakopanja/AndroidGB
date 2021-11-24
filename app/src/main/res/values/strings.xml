@@ -5,4 +5,12 @@
     <string name="second_counter">Second Counter</string>
     <string name="third_counter">Third Counter</string>
     <string name="username">Username</string>
+    <string name="forks_count">Forks count:</string>
+    <string name="repo_name">Repository name</string>
+    <string name="repo_description">Description</string>
+    <string name="repo_forks_count">Forks count</string>
+    <string name="repo_created">Created at</string>
+    <string name="repo_language">Language</string>
+    <string name="repositories">Repositories:</string>
+    <string name="repository_title">Repository Title</string>
 </resources>

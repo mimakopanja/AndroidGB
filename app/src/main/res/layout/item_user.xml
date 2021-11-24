@@ -4,12 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="50dp"
+    android:layout_margin="5dp"
     android:foreground="?attr/selectableItemBackground"
     android:gravity="center_vertical"
     android:orientation="horizontal">
 
+    <ImageView
+        android:id="@+id/avatar_image"
+        tools:src="@tools:sample/avatars"
+        android:layout_width="@dimen/avatar_size"
+        android:layout_height="@dimen/avatar_size"/>
+
     <TextView
-        android:id="@+id/tv_login"
+        android:id="@+id/username_text_view"
         android:layout_gravity="center"
         style="@style/TextAppearance.MaterialComponents.Overline"
         android:layout_width="wrap_content"
