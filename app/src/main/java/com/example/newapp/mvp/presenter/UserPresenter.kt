@@ -8,13 +8,14 @@ import com.example.newapp.mvp.presenter.list.IRepositoryListPresenter
 import com.example.newapp.mvp.view.UserView
 import com.example.newapp.mvp.view.list.RepositoryItemView
 import com.example.newapp.mvp.model.navigation.IScreens
+import com.example.newapp.mvp.model.repo.IGithubRepositoriesRepo
 import com.github.terrakok.cicerone.Router
 import io.reactivex.rxjava3.core.Scheduler
 import moxy.MvpPresenter
 
 class UserPresenter(
     private val user: GithubUser,
-    private val userRepo: IGithubUsersRepo,
+    private val repo: IGithubRepositoriesRepo,
     private val uiScheduler: Scheduler,
     private val screens: IScreens,
     private val router: Router
@@ -47,16 +48,15 @@ class UserPresenter(
     }
 
     private fun loadData() {
-        user.reposUrl?.let { url ->
-            userRepo.loadUserRepos(url)
-                .observeOn(uiScheduler)
-                .subscribe({ repos ->
-                    userReposListPresenter.repos.clear()
-                    userReposListPresenter.repos.addAll(repos)
-                    viewState.updateList()
-                }, { error -> viewState.showError(error)}
-                )
-        }
+        repo.getUserRepositories(user)
+            .observeOn(uiScheduler)
+            .subscribe({ repositories ->
+                userReposListPresenter.repos.clear()
+                userReposListPresenter.repos.addAll(repositories)
+                viewState.updateList()
+            }, {
+                println("Error: ${it.message}")
+            })
     }
 
     override fun backPressed(): Boolean {

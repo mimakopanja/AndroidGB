@@ -1,6 +1,7 @@
 package com.example.newapp
 
 import android.app.Application
+import com.example.newapp.mvp.model.entity.room.db.Database
 import com.github.terrakok.cicerone.Cicerone
 import com.github.terrakok.cicerone.Router
 
@@ -20,5 +21,6 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
+        Database.create(this)
     }
 }

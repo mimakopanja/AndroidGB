@@ -12,12 +12,16 @@ import com.example.newapp.BackButtonListener
 import com.example.newapp.USER_BUNDLE_TAG
 import com.example.newapp.databinding.FragmentUserBinding
 import com.example.newapp.mvp.model.api.ApiHolder
+import com.example.newapp.mvp.model.cache.room.RoomGithubRepositoriesCache
 import com.example.newapp.mvp.model.entity.GithubUser
+import com.example.newapp.mvp.model.entity.room.db.Database
+import com.example.newapp.mvp.model.repo.RetrofitGithubRepositoriesRepo
 import com.example.newapp.mvp.model.repo.RetrofitGithubUsersRepo
 import com.example.newapp.mvp.presenter.UserPresenter
 import com.example.newapp.mvp.view.UserView
 import com.example.newapp.ui.navigation.AndroidScreens
 import com.example.newapp.ui.adapter.RepositoriesRecyclerViewAdapter
+import com.example.newapp.ui.network.AndroidNetworkStatus
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import moxy.MvpAppCompatActivity
 import moxy.MvpAppCompatFragment
@@ -42,7 +46,11 @@ class UserFragment : MvpAppCompatFragment(), UserView, BackButtonListener {
         val user: GithubUser = arguments?.getParcelable<GithubUser>(USER_BUNDLE_TAG) as GithubUser
         UserPresenter(
             user,
-            RetrofitGithubUsersRepo(ApiHolder.api),
+            RetrofitGithubRepositoriesRepo(
+                ApiHolder.api,
+                AndroidNetworkStatus(requireContext()),
+                RoomGithubRepositoriesCache(Database.getInstance())
+            ),
             AndroidSchedulers.mainThread(),
             AndroidScreens(),
             App.instance.router
