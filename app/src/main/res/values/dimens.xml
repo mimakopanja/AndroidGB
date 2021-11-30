@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="sixteen_dp">16dp</dimen>
+    <dimen name="sixteen_margin">16dp</dimen>
+    <dimen name="login_text_size">20sp</dimen>
+    <dimen name="ten_margin">10dp</dimen>
+    <dimen name="avatar_size">50dp</dimen>
+    <dimen name="repo_name_text_size">15sp</dimen>
+    <dimen name="eight_dp">8dp</dimen>
 </resources>
