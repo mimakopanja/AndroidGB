@@ -22,6 +22,7 @@ import com.example.newapp.ui.network.AndroidNetworkStatus
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
 class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
     companion object {
@@ -33,16 +34,9 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
         get() = _binding!!
 
     private val presenter by moxyPresenter {
-        UsersPresenter(
-            RetrofitGithubUsersRepo(
-                ApiHolder.api,
-                AndroidNetworkStatus(requireContext()),
-                RoomGithubUsersCache(Database.getInstance())
-            ),
-            App.instance.router,
-            AndroidSchedulers.mainThread(),
-            AndroidScreens()
-        )
+        UsersPresenter(AndroidSchedulers.mainThread()).apply {
+            App.instance.appComponent.inject(this)
+        }
     }
     private var adapter: UsersRecyclerViewAdapter? = null
 
@@ -62,7 +56,9 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
 
     override fun init() {
         binding.usersRecyclerView.layoutManager = LinearLayoutManager(context)
-        adapter = UsersRecyclerViewAdapter(presenter.usersListPresenter, GlideImageLoader())
+        adapter = UsersRecyclerViewAdapter(presenter.usersListPresenter).apply {
+            App.instance.appComponent.inject(this)
+        }
         binding.usersRecyclerView.adapter = adapter
     }
 

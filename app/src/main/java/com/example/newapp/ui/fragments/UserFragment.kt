@@ -22,12 +22,15 @@ import com.example.newapp.mvp.view.UserView
 import com.example.newapp.ui.navigation.AndroidScreens
 import com.example.newapp.ui.adapter.RepositoriesRecyclerViewAdapter
 import com.example.newapp.ui.network.AndroidNetworkStatus
+import com.github.terrakok.cicerone.Router
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import moxy.MvpAppCompatActivity
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
 class UserFragment : MvpAppCompatFragment(), UserView, BackButtonListener {
+
 
     companion object {
         fun newInstance(user: GithubUser) = UserFragment().apply {
@@ -44,17 +47,9 @@ class UserFragment : MvpAppCompatFragment(), UserView, BackButtonListener {
 
     private val presenter by moxyPresenter {
         val user: GithubUser = arguments?.getParcelable<GithubUser>(USER_BUNDLE_TAG) as GithubUser
-        UserPresenter(
-            user,
-            RetrofitGithubRepositoriesRepo(
-                ApiHolder.api,
-                AndroidNetworkStatus(requireContext()),
-                RoomGithubRepositoriesCache(Database.getInstance())
-            ),
-            AndroidSchedulers.mainThread(),
-            AndroidScreens(),
-            App.instance.router
-        )
+        UserPresenter(user, AndroidSchedulers.mainThread()).apply {
+            App.instance.appComponent.inject(this)
+        }
     }
 
     override fun onCreateView(

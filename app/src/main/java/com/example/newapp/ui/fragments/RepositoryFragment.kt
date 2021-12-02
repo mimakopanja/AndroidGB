@@ -13,9 +13,11 @@ import com.example.newapp.databinding.FragmentRepositoryBinding
 import com.example.newapp.mvp.model.entity.GithubRepository
 import com.example.newapp.mvp.presenter.RepositoryPresenter
 import com.example.newapp.mvp.view.RepositoryView
+import com.github.terrakok.cicerone.Router
 import moxy.MvpAppCompatActivity
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
 class RepositoryFragment: MvpAppCompatFragment(), RepositoryView, BackButtonListener {
 
@@ -24,7 +26,9 @@ class RepositoryFragment: MvpAppCompatFragment(), RepositoryView, BackButtonList
     private val presenter by moxyPresenter {
         val repository: GithubRepository =
             arguments?.getParcelable<GithubRepository>(REPOSITORY_BUNDLE_TAG) as GithubRepository
-        RepositoryPresenter(repository, App.instance.router)
+        RepositoryPresenter(repository).apply {
+            App.instance.appComponent.inject(this)
+        }
     }
 
     override fun onCreateView(

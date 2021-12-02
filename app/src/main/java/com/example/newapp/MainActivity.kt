@@ -6,29 +6,30 @@ import android.view.MenuItem
 import com.example.newapp.databinding.ActivityMainBinding
 import com.example.newapp.mvp.presenter.MainPresenter
 import com.example.newapp.mvp.view.MainView
-import com.example.newapp.ui.navigation.AndroidScreens
+import com.github.terrakok.cicerone.NavigatorHolder
 import com.github.terrakok.cicerone.androidx.AppNavigator
 import moxy.MvpAppCompatActivity
 import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
 class MainActivity : MvpAppCompatActivity(), MainView {
 
     private lateinit var viewBinding: ActivityMainBinding
 
-    private val navigatorHolder = App.instance.navigatorHolder
+    @Inject lateinit var navigatorHolder: NavigatorHolder
     private val navigator = AppNavigator(this, R.id.container)
 
     private val presenter by moxyPresenter {
-        MainPresenter(
-            App.instance.router,
-            AndroidScreens()
-        )
+        MainPresenter().apply {
+            App.instance.appComponent.inject(this)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
+        App.instance.appComponent.inject(this)
     }
 
     override fun onResumeFragments() {

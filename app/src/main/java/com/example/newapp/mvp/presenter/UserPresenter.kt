@@ -12,14 +12,16 @@ import com.example.newapp.mvp.model.repo.IGithubRepositoriesRepo
 import com.github.terrakok.cicerone.Router
 import io.reactivex.rxjava3.core.Scheduler
 import moxy.MvpPresenter
+import javax.inject.Inject
 
 class UserPresenter(
     private val user: GithubUser,
-    private val repo: IGithubRepositoriesRepo,
-    private val uiScheduler: Scheduler,
-    private val screens: IScreens,
-    private val router: Router
+    private val uiScheduler: Scheduler
 ): MvpPresenter<UserView>(), BackButtonListener {
+
+    @Inject lateinit var repo: IGithubRepositoriesRepo
+    @Inject lateinit var router: Router
+    @Inject lateinit var screens: IScreens
 
     val userReposListPresenter = UserReposListPresenter()
 

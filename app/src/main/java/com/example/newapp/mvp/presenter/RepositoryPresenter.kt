@@ -5,11 +5,13 @@ import com.example.newapp.mvp.model.entity.GithubRepository
 import com.example.newapp.mvp.view.RepositoryView
 import com.github.terrakok.cicerone.Router
 import moxy.MvpPresenter
+import javax.inject.Inject
 
 class RepositoryPresenter(
-    private val repository: GithubRepository,
-    private val router: Router
+    private val repository: GithubRepository
 ): MvpPresenter<RepositoryView>(), BackButtonListener {
+
+    @Inject lateinit var router: Router
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()

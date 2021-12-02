@@ -9,12 +9,12 @@ import com.example.newapp.mvp.model.image.IImageLoader
 import com.example.newapp.mvp.presenter.list.IUserListPresenter
 import com.example.newapp.mvp.view.list.UserItemView
 import kotlinx.android.extensions.LayoutContainer
+import javax.inject.Inject
 
-class UsersRecyclerViewAdapter(
-    private val presenter: IUserListPresenter,
-    val imageLoader: IImageLoader<ImageView>
-):
+class UsersRecyclerViewAdapter(private val presenter: IUserListPresenter):
 RecyclerView.Adapter<UsersRecyclerViewAdapter.ViewHolder>(){
+
+    @Inject lateinit var imageLoader: IImageLoader<ImageView>
 
     inner class ViewHolder(private val binding: ItemUserBinding):
             RecyclerView.ViewHolder(binding.root), LayoutContainer, UserItemView{
