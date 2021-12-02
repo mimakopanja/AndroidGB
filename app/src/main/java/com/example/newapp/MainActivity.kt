@@ -1,34 +1,60 @@
 package com.example.newapp
 
-import androidx.appcompat.app.AppCompatActivity
+
 import android.os.Bundle
-import android.view.View
-import by.kirich1409.viewbindingdelegate.viewBinding
+import android.view.MenuItem
 import com.example.newapp.databinding.ActivityMainBinding
+import com.example.newapp.mvp.presenter.MainPresenter
+import com.example.newapp.mvp.view.MainView
+import com.github.terrakok.cicerone.NavigatorHolder
+import com.github.terrakok.cicerone.androidx.AppNavigator
+import moxy.MvpAppCompatActivity
+import moxy.ktx.moxyPresenter
+import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(R.layout.activity_main), MainView {
+class MainActivity : MvpAppCompatActivity(), MainView {
 
-    private val binding: ActivityMainBinding by viewBinding()
-    private val presenter = MainPresenter(this)
+    private lateinit var viewBinding: ActivityMainBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(binding.root)
-        val listener = View.OnClickListener {
-            presenter.counterClick(it.id)
-        }
-        with(binding){
-            btnCounter1.setOnClickListener(listener)
-            btnCounter2.setOnClickListener(listener)
-            btnCounter3.setOnClickListener(listener)
+    @Inject lateinit var navigatorHolder: NavigatorHolder
+    private val navigator = AppNavigator(this, R.id.container)
+
+    private val presenter by moxyPresenter {
+        MainPresenter().apply {
+            App.instance.appComponent.inject(this)
         }
     }
 
-    override fun setButtonText(index: Int, text: String) = with(binding) {
-        when(index){
-            0 -> btnCounter1.text = text
-            1 -> btnCounter2.text = text
-            2 -> btnCounter3.text = text
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewBinding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(viewBinding.root)
+        App.instance.appComponent.inject(this)
+    }
+
+    override fun onResumeFragments() {
+        super.onResumeFragments()
+        navigatorHolder.setNavigator(navigator)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        navigatorHolder.removeNavigator()
+    }
+
+    override fun onBackPressed() {
+        supportFragmentManager.fragments.forEach {
+            if (it is BackButtonListener && it.backPressed()) {
+                return
+            }
         }
+        presenter.backClicked()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when( item.itemId) {
+        android.R.id.home -> {
+            onBackPressed()
+            true
+        } else -> super.onOptionsItemSelected(item)
     }
 }

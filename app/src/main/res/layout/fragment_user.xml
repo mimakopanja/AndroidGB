@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/user_login_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/TextAppearance.MaterialComponents.Overline"
+        android:textSize="@dimen/login_text_size"
+        android:layout_margin="@dimen/sixteen_margin"
+        tools:text="Username"
+        android:layout_gravity="center_horizontal"/>
+
+    <TextView
+        android:text="@string/repositories"
+        style="@style/TextAppearance.MaterialComponents.Headline6"
+        android:textAllCaps="true"
+        android:layout_marginTop="@dimen/sixteen_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/repo_recycler_view"
+        tools:listitem="@layout/item_repository"
+        android:clipToPadding="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>
